@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"os"
 	"sort"
+	"strings"
 )
 
 type Problem struct {
@@ -16,9 +17,14 @@ type Problem struct {
 
 type Problems []Problem
 
-func (s Problems) Len() int           { return len(s) }
-func (s Problems) Swap(i, j int)      { s[i], s[j] = s[j], s[i] }
-func (s Problems) Less(i, j int) bool { return s[i].ContestID > s[j].ContestID }
+func (s Problems) Len() int      { return len(s) }
+func (s Problems) Swap(i, j int) { s[i], s[j] = s[j], s[i] }
+func (s Problems) Less(i, j int) bool {
+	if s[i].ContestID != s[j].ContestID {
+		return s[i].ContestID > s[j].ContestID
+	}
+	return strings.Compare(s[i].Index, s[j].Index) < 0
+}
 
 type Submission struct {
 	Verdict string  `json:"verdict"`
